@@ -7,25 +7,19 @@ cur=con.cursor()
 # Creation of table Employer
 class Contact:
 
-    # sql=("""CREATE TABLE Employer(
-    #         CompanyID varchar(5) NOT NULL PRIMARY KEY,
-    #     CompanyName Varchar(50) NOT NULL,
-    #     EmailID Varchar(30),
-    #     Mobile Bigint(10) CHECK (length(Mobile) = 10),
-    #     City Varchar(15),
-    #     IndustryType Varchar(20),
-    #     FunctionalArea Varchar(20),
-    #     MembershipPlan Varchar(20) CHECK (MembershipPlan IN('Trial','Monthly','Yearly')),
-    #     DateofSignup TIMESTAMP DEFAULT CURRENT_TIMESTAMP CHECK (DateofSignup >= CURRENT_TIMESTAMP),
-    #     DateofRenewal TIMESTAMP,
-    #     RenewalStatus varchar(10) CHECK (RenewalStatus IN ('Active','Expired'))
-    #     )
+    # sql=("""CREATE TABLE contacts(
+    #     Name varchar(45) NOT NULL,
+    #     EmailId varchar(45) NOT NULL PRIMARY KEY)
     #     """)
     # cur.execute(sql)
 
     def save(self):
         self.name = str(input("Enter the Contact Name to be saved: "))
         self.mail = str(input("Enter the Email ID to the corresponding name: "))
+        if self.name == "" or self.mail == "":
+            print("Empty values are not accepted.")
+            self.save()
+            return False
         try:
             cur.execute('''INSERT INTO contacts VALUES("%s","%s")''',(self.name,self.mail))
             con.commit()
@@ -38,7 +32,7 @@ class Contact:
                 self.save()
             else:
                 print("Exiting...")
-                return
+
         except pymysql.err.IntegrityError:
             print("Error : EmailId already exists")
             self.choice = str(input("Do you want to save another contancts? (Y/N)"))
@@ -47,18 +41,28 @@ class Contact:
             if self.choice in ["y", "yes"]:
                 self.save()
             else:
-                return
+                return False
 
-        return
+        return False
+
+    def show(self):
+        cur.execute('''SELECT * FROM contacts ''')
+        for each in cur.fetchall():
+            print("Name and corresponding Email ID:",each[0]," ",each[1])
+        return False
+
+    def fetch(self,name):
+        cur.execute('''select emailid from contacts where name = %s''',(name))
+        for x in cur.fetchall():
+            self.name = x[0]
+        return self.name
 
 
 
-    # con.commit()
-    #
-    #
-    #
-    #
-    # #close Connection
-    # con.close()
+
+
+
 obj5 = Contact()
-obj5.save()
+#obj5.save()
+#obj5.show()
+obj5.fetch("qwe")

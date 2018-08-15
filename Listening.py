@@ -1,14 +1,12 @@
+import speech_recognition as sr
+
 import first
 import smtplib_send
-import speech_recognition as sr
+
 r = sr.Recognizer()
 class Listen:
 
     def hear(self):
-        "listens for commands"
-
-
-
         with sr.Microphone() as source:
             #self.speak("Ready...")
             r.pause_threshold = 0.5
@@ -38,10 +36,13 @@ class Listen:
             self.receiverId = self.hear()
             self.Id = self.receiverId.replace(" ","")
             print(self.Id)
+
+
             obj3.textToSpeech("Speak the Subject")
             self.subject = self.hear()
             obj3.textToSpeech("Speak the Content of body")
             self.body = self.hear()
+            obj4.sendMail(self.receiverId,self.subject,self.body)
 
         elif self.command in ["2","two","open inbox","check inbox","go to inbox","inbox" ]:
             print("done2")
@@ -56,9 +57,11 @@ class Listen:
         else:
             obj3.textToSpeech("No such cammand")
         return
+
 obj2 = Listen()
 obj3 = first.Menu()
 obj4 = smtplib_send.Send()
+obj4.sendMail("kajaharish.4hud@gmail.com","hello","kya chlar ra")
 #obj3.mainMenu()
 #obj3.textToSpeech("Issue a command")
 obj2.process()

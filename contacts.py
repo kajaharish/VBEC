@@ -26,15 +26,29 @@ class Contact:
     def save(self):
         self.name = str(input("Enter the Contact Name to be saved: "))
         self.mail = str(input("Enter the Email ID to the corresponding name: "))
-        cur.execute('''INSERT INTO contacts VALUES("%s","%s")''',(self.name,self.mail))
-        con.commit()
-        self.choice = str(input("Do you want to save more contancts? (Y/N)"))
-        self.choice = self.choice.lower()
+        try:
+            cur.execute('''INSERT INTO contacts VALUES("%s","%s")''',(self.name,self.mail))
+            con.commit()
+            print("Successfully saved")
 
-        if self.choice in ["y","yes"]:
-            self.save()
-        else:
-            return
+            self.choice = str(input("Do you want to save another contancts? (Y/N)"))
+            self.choice = self.choice.lower()
+
+            if self.choice in ["y","yes"]:
+                self.save()
+            else:
+                print("Exiting...")
+                return
+        except pymysql.err.IntegrityError:
+            print("Error : EmailId already exists")
+            self.choice = str(input("Do you want to save another contancts? (Y/N)"))
+            self.choice = self.choice.lower()
+
+            if self.choice in ["y", "yes"]:
+                self.save()
+            else:
+                return
+
         return
 
 

@@ -71,10 +71,11 @@ class Contact:
         try:
             cur.execute('''select emailid from contacts where name = %s''',(name))
             for x in cur.fetchall():
-                self.name = x[0]
-            return self.name
+                self.emailId = x[0]
+            return self.emailId
         except:
             print("Contact doesn't Exist.")
+            return False
             con.close()
 
 

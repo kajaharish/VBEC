@@ -8,63 +8,95 @@ import smtplib_send
 r = sr.Recognizer()
 class Listen:
 
-    def hear(self):
-        with sr.Microphone() as source:
-            #self.speak("Ready...")
-            r.pause_threshold = 0.5
-            r.adjust_for_ambient_noise(source, duration=1)
-            audio = r.listen(source)
-            self.speechToText(audio)
-        return self.command
+    # def hear(self):
+    #     with sr.Microphone() as source:
+    #         #self.speak("Ready...")
+    #         r.pause_threshold = 0.5
+    #         r.adjust_for_ambient_noise(source, duration=1)
+    #         audio = r.listen(source)
+    #         self.speechToText(audio)
+    #     return self.command
+    #
+    # def speechToText(self,audio):
+    #     try:
+    #         self.command = r.recognize_google(audio).lower()
+    #         obj3.textToSpeech('You said: ' + self.command + '\n')
+    #         print(self.command)
+    #         #self.process(self.command)
+    #         return self.command
+    #
+    #     except sr.UnknownValueError:
+    #         obj3.textToSpeech('Your last command couldn\'t be heard')
+    #         self.command = self.hear()
 
-    def speechToText(self,audio):
-        try:
-            self.command = r.recognize_google(audio).lower()
-            obj3.textToSpeech('You said: ' + self.command + '\n')
-            print(self.command)
-            #self.process(self.command)
-            return self.command
+    def repeatName(self):
+        obj3.textToSpeech("Speak the receiver name")
+        self.nameId = obj3.hear()
+        self.Id = obj5.fetch(self.nameId)
+        if self.Id is None:
+            obj2.repeatName()
+        else:
+            return self.Id
 
-        except sr.UnknownValueError:
-            obj3.textToSpeech('Your last command couldn\'t be heard')
-            self.command = self.hear()
+    def repeatSubject(self):
+        obj3.textToSpeech("Speak the Subject")
+        self.subject = obj3.hear()
+        return self.subject
+
+    def repeatBody(self):
+        obj3.textToSpeech("Speak the Content of body")
+        self.body = obj3.hear()
+        return self.body
+
+    def changes(self):
+        obj3.textToSpeech("do you wish to make some changes in name, subject, body? If yes then please say the header name or else say NO!")
+        self.change = obj3.hear()
+        if self.change in ["name"]:
+            obj2.repeatName()
+            obj2.changes()
+        elif self.change in ["subject"]:
+            obj2.repeatSubject()
+            obj2.changes()
+        elif self.change in ["body"]:
+            obj2.repeatBody()
+            obj2.changes()
+        else:
+            return True
+
+
 
     def process(self):
-        self.hear()
-        if self.command in ["1","one","compose a mail","send a mail", "send mail", "compose an email", "compose email"]:
-            obj3.textToSpeech("Speak the receiver Mail ID")
-            self.receiverId = self.hear()
-            self.Id = self.receiverId.replace(" ","")
-            print(self.Id)
+        obj3.hear()
+        if obj3.command in ["1","one","compose a mail","send a mail", "send mail", "compose an email", "compose email"]:
+            obj2.repeatName()
+            obj2.repeatSubject()
+            obj2.repeatBody()
+            obj2.changes()
+            obj4.sendMail(self.Id, self.subject, self.body)
 
-            obj3.textToSpeech("Speak the Subject")
-            self.subject = self.hear()
-            obj3.textToSpeech("Speak the Content of body")
-            self.body = self.hear()
-            obj4.sendMail(self.receiverId, self.subject, self.body)
+        elif obj3.command in ["2","two", "to","list new messages","read new messages","list unread messages" ]:
+            #obj5.fetch()
+            pass
 
-        elif self.command in ["2","two", "to","open inbox","check inbox","go to inbox","inbox" ]:
+        elif obj3.command in ["3", "tree", "three", "check new mails", "new mails", "is there any new mail"]:
             obj6.fetchInbox()
 
-        elif self.command in ["3", "tree", "three", "check new mails", "new mails", "is there any new mail"]:
-            obj6.fetchInbox()
-
-        elif self.command in ["4","four","Check read emails","check read emails","go to read emails","go to readmails"]:
+        elif obj3.command in ["4","four","Check read emails","check read emails","go to read emails","go to readmails"]:
             print("done4")
 
-        elif self.command in ["5","five","go to sent box","open sent box","","check sent mails","check sent box" ]:
+        elif obj3.command in ["5","five","go to sent box","open sent box","","check sent mails","check sent box" ]:
             print("done5")
 
-        elif self.command in ["6","six","compose a mail","send a mail","send mail","compose an email","compose email" ]:
+        elif obj3.command in ["6","six","compose a mail","send a mail","send mail","compose an email","compose email" ]:
             print("done5")
-        elif self.command in ["7","seven","add another contact","add a contact","save another contact","save a contact"]:
+        elif obj3.command in ["7","seven","add another contact","add a contact","save another contact","save a contact"]:
             obj5.save()
 
-        elif self.command in ["8","eight","compose a mail","send a mail","send mail","compose an email","compose email" ]:
+        elif obj3.command in ["8","eight","compose a mail","send a mail","send mail","compose an email","compose email" ]:
             self.erase = str(input("Enter the name of the contact details you wish to erase:"))
             obj5.delete(self.erase)
 
-        elif self.command in ["9", "nine", "show all contacts", "show contacts", "list all contacts", "compose an email","compose email"]:
+        elif obj3.command in ["9", "nine", "show all contacts", "show contacts", "list all contacts", "compose an email","compose email"]:
             obj5.show()
 
         else:

@@ -1,4 +1,5 @@
 import imaplib
+import sys
 
 import mailparser
 
@@ -6,8 +7,10 @@ import first
 
 
 class Inbox:
+    lower = -4
+    upper = 0
 
-    def fetchAll(self):
+    def fetchAll(self,lower,upper):
         try:
             mail = imaplib.IMAP4_SSL('imap.gmail.com')
             mail.login('helmetmail05@gmail.com', 'qwerty@123')
@@ -20,7 +23,7 @@ class Inbox:
             id_list = ids.split()  # ids is a space separated string
             i = 1
 
-            for x in reversed(range(-10,0)):
+            for x in reversed(range(lower,upper)):
 
                 latest_email_id = id_list[x]  # get the latest
 
@@ -37,13 +40,22 @@ class Inbox:
 
         except IndexError:
             obj7.textToSpeech("\nNo more messages")
+            #self.outcome = False
+            sys.exit()
 
         except imaplib.IMAP4.error:
             obj7.textToSpeech("Authentication Error! please check your credentials")
+
+    def fetchInbox(self):
+        self.fetchAll(Inbox.lower,Inbox.upper)
+        obj7.textToSpeech("Do you want to read more messages ?")
+        if obj7.hear() in ["yes"]:
+            Inbox.lower -= 5
+            Inbox.upper -= 5
+            self.fetchInbox()
 
 
 
 
 obj6 = Inbox()
 obj7 = first.Menu()
-obj6.fetchAll()

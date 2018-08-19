@@ -2,26 +2,31 @@
 
 import smtplib
 
+import first
+
+
 class Send:
 
    def sendMail(self,receiverId,subject,body):
        sender = 'helmetmail05@gmail.com'
-       message = """From: Harish Kaja
+       message = """From: {}
 To: {}
 Subject: {}
        
 {}
-""".format(receiverId,subject,body)
+""".format(obj2.fetchCredential()[2],receiverId,subject,body)
 
        try:
            smtpObj = smtplib.SMTP('smtp.gmail.com',587)
            smtpObj.starttls()
-           smtpObj.login("helmetmail05@gmail.com", "qwerty@123")
+           smtpObj.login(obj2.fetchCredential()[0], obj2.fetchCredential()[1])
            smtpObj.sendmail(sender,receiverId, message)
-           print("Successfully sent email to",receiverId)
-           return True
+           return ("Successfully sent email to",receiverId)
        except smtplib.SMTPException:
-           print("Error: unable to send email")
-           return False
-#obj4 = Send()
-#Send().sendMail()
+           return ("Error: unable to send email")
+       except TypeError:
+           return ("No credentials have been provided")
+
+obj2 = first.Menu()
+# obj4 = Send()
+# obj4.sendMail("helmetmail05@gmail.com","Drag","body")

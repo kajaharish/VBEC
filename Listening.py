@@ -61,7 +61,7 @@ class Listen:
             obj2.process()
 
 
-        elif obj3.command in ["3", "tree", "three", "check new mails", "new mails", "is there any new mail"]:
+        elif obj3.command in ["3", "tree", "three", "check inbox", "read inbox"]:
             obj6.fetchInbox()
             obj2.process()
 
@@ -92,6 +92,7 @@ class Listen:
 
         else:
             obj3.textToSpeech("No such cammand")
+            obj3.hear()
         return
 
 obj2 = Listen()

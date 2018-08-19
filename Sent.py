@@ -5,16 +5,16 @@ import mailparser
 import first
 
 
-class Inbox:
+class SentBox:
     lower = -4
     upper = 0
 
     def fetchAll(self,lower,upper):
         try:
             mail = imaplib.IMAP4_SSL('imap.gmail.com')
-            mail.login(obj7.fetchCredential()[0],obj7.fetchCredential()[1])
+            mail.login(obj7.fetchCredential()[0], obj7.fetchCredential()[1])
             mail.list()
-            mail.select("inbox")  # connect to inbox.
+            mail.select('"[Gmail]/Sent Mail"')  # connect to inbox.
 
             result, data = mail.search(None, "ALL")
 
@@ -30,16 +30,15 @@ class Inbox:
 
                 raw_email = data[0][1]  # here's the body, which is raw text of the whole email
                 mail5 = mailparser.parse_from_bytes(raw_email)
-
-                # print(mail5.body)
                 for name in mail5.from_:
-                    self.audioString = str(str(i)+ ". Name is "+ name[0]+ ". Mail ID is"+ name[1]+ ", Subject, is, "+ mail5.subject )
+                    self.audioString = str(str(i)+ ". receiver's E-Mail ID is "+ mail5.to[0][1]+ ", Subject, is, "+ mail5.subject )
                     obj7.textToSpeech(self.audioString)
                     obj7.textToSpeech("Do you want to read the body of this message?")
                     if obj7.hear() in ["yes", "ya", "yeah"]:
                         obj7.textToSpeech(str(mail5.body.split("--- mail_boundary ---")[0]))
+
                     i += 1
-            return True
+
         except IndexError:
             obj7.textToSpeech("\nNo more messages")
             #self.outcome = False
@@ -53,20 +52,18 @@ class Inbox:
             obj7.textToSpeech("No credentials have been provided")
             return False
 
-    def fetchInbox(self):
-
-        if self.fetchAll(Inbox.lower,Inbox.upper) == True:
+    def fetchSentBox(self):
+        if self.fetchAll(SentBox.lower,SentBox.upper) == True:
             obj7.textToSpeech("Do you want to read more messages ?")
             if obj7.hear() in ["yes"]:
-                Inbox.lower -= 5
-                Inbox.upper -= 4
-                self.fetchInbox()
+                SentBox.lower -= 5
+                SentBox.upper -= 4
+                self.fetchSentBox()
         else:
             return
 
 
 
-
-obj6 = Inbox()
+obj6 = SentBox()
 obj7 = first.Menu()
-# obj6.fetchInbox()
+

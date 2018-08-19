@@ -2,9 +2,9 @@ import speech_recognition as sr
 from gtts import gTTS
 import time
 import os
+import record
 
 class main:
-
 
     def speak(self, audioString):
         print(audioString)
@@ -83,7 +83,10 @@ class main:
 #spk = main()
 #spk.speak("Hello, Welcome to TalkMail.")
 #spk.menu()
-t = main()
-t.listenTome()
-t.confirm()
+#t = main()
+#t.listenTome()
+#t.confirm()
 #t.task()
+test = main()
+test.listenTome()
+test.confi

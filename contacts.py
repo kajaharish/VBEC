@@ -64,7 +64,7 @@ class Contact:
         cur.execute('''SELECT * FROM contacts ''')
         for each in cur.fetchall():
             print("Name and corresponding Email ID:",each[0]," ",each[1])
-        return False
+        return True
 
 
     def fetch(self,name):

@@ -50,6 +50,9 @@ class Inbox:
         except imaplib.IMAP4.error:
             obj7.textToSpeech("Authentication Error! please check your credentials")
 
+        except TypeError:
+            return ("No credentials have been provided")
+
     def fetchInbox(self):
         self.fetchAll(Inbox.lower,Inbox.upper)
         obj7.textToSpeech("Do you want to read more messages ?")

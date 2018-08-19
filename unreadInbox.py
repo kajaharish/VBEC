@@ -51,6 +51,9 @@ class Unread:
         except imaplib.IMAP4.error:
             obj8.textToSpeech("Authentication Error! please check your credentials")
 
+        except TypeError:
+            return ("No credentials have been provided")
+
     def fetch(self):
         self.fetchUnread(Unread.lower, Unread.upper)
         obj8.textToSpeech("Do you want to read more messages ?")

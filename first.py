@@ -15,6 +15,18 @@ class Menu:
         for each in cur.fetchall():
             return each
 
+    def addCredential(self):
+        cur.execute("""truncate Login """)
+        self.emailId = input("Enter the EmailId: ")
+        self.password = input("Enter the password: ")
+        self.name = input("Enter the Nick Name for your account:")
+        if cur.execute("""insert into Login values(%s,%s,%s)""",(self.emailId,self.password,self.name)) == 1:
+            con.commit()
+            print("successfully added")
+            return True
+
+
+
     def hear(self):
         with sr.Microphone() as source:
             #self.speak("Ready...")
@@ -44,17 +56,16 @@ class Menu:
         os.remove("audio.mp3")
         return
 
+    def welcome(self):
+        self.textToSpeech("""Hi, Welcome to Talkmail. """)
 
     def mainMenu(self):
-        self.textToSpeech("""Hi, Welcome to Talkmail.        
-        Please Select a desired option:
-        1. Compose a Mail, 2. Check New Mails, 3. Go to Inbox , 4. Check read Mails, 5. Goto Sent Mails, 6. Go to Draft, 7. Add Contact, 8. Delete Contact,
-        9. show all contacts
-        
-        """)
+        self.textToSpeech(""" Please Select a desired option:
+        1. Compose a Mail, 2. Check New Mails, 3. Go to Inbox , 4. Goto Sent Box , 5. Add credentials , 6. show current mail ID , 
+        7. Add Contact, 8. Delete Contact, 9. show all contacts """)
         return
 
-
-# obj1 = Menu()
+obj1 = Menu()
+# obj1.addCredential()
 # print(obj1.fetchCredential())
 # obj1.mainMenu()

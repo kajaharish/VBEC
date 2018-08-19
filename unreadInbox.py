@@ -7,18 +7,18 @@ import FetchBody
 import first
 
 
-class Inbox:
+class Unread:
     lower = -4
     upper = 0
 
-    def fetchAll(self,lower,upper):
+    def fetchUnread(self,lower,upper):
         try:
             mail = imaplib.IMAP4_SSL('imap.gmail.com')
-            mail.login(obj7.fetchCredential()[0], obj7.fetchCredential()[1])
+            mail.login(obj8.fetchCredential()[0], obj8.fetchCredential()[1])
             mail.list()
             mail.select("inbox")  # connect to inbox.
 
-            result, data = mail.search(None, "ALL")
+            result, data = mail.search(None, '(UNSEEN)')
 
             ids = data[0]  # data is a list.
             id_list = ids.split()  # ids is a space separated string
@@ -36,32 +36,30 @@ class Inbox:
                 # print(mail5.body)
                 for name in mail5.from_:
                     self.audioString = str(str(i)+ ". Name is "+ name[0]+ ". Mail ID is"+ name[1]+ ", Subject, is, "+ mail5.subject )
-                    obj7.textToSpeech(self.audioString)
-                    obj7.textToSpeech("Do you want to read the body of this message?")
-                    if obj7.hear() in ["yes", "ya", "yeah"]:
-                        obj7.textToSpeech(obj8.fetchBody(x))
+                    obj8.textToSpeech(self.audioString)
+                    obj8.textToSpeech("Do you want to read the body of this message?")
+                    if obj8.hear() in ["yes", "ya", "yeah"]:
+                        obj8.textToSpeech(obj10.fetchBody(x))
+                    mail.store(latest_email_id, '-FLAGS', '\\Seen')
                     i += 1
 
         except IndexError:
-            obj7.textToSpeech("\nNo more messages")
+            obj8.textToSpeech("\nNo new messages")
             #self.outcome = False
             sys.exit()
 
         except imaplib.IMAP4.error:
-            obj7.textToSpeech("Authentication Error! please check your credentials")
+            obj8.textToSpeech("Authentication Error! please check your credentials")
 
-    def fetchInbox(self):
-        self.fetchAll(Inbox.lower,Inbox.upper)
-        obj7.textToSpeech("Do you want to read more messages ?")
-        if obj7.hear() in ["yes"]:
-            Inbox.lower -= 5
-            Inbox.upper -= 4
-            self.fetchInbox()
+    def fetch(self):
+        self.fetchUnread(Unread.lower, Unread.upper)
+        obj8.textToSpeech("Do you want to read more messages ?")
+        if obj8.hear() in ["yes"]:
+            Unread.lower -= 5
+            Unread.upper -= 4
+            self.fetch()
 
-
-
-
-obj6 = Inbox()
-obj7 = first.Menu()
-obj8 = FetchBody.Body()
-# obj6.fetchInbox()
+obj9 = Unread()
+obj8 = first.Menu()
+obj10 = FetchBody.Body()
+# obj9.fetch()

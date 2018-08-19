@@ -1,10 +1,19 @@
 import os
 
+import pymysql
 import speech_recognition as sr
 from gtts import gTTS
 
 r = sr.Recognizer()
+con = pymysql.connect("localhost", "root", "", "test")
+cur = con.cursor()
 class Menu:
+
+
+    def fetchCredential(self):
+        cur.execute('''SELECT * FROM Login ''')
+        for each in cur.fetchall():
+            return each
 
     def hear(self):
         with sr.Microphone() as source:
@@ -46,5 +55,6 @@ class Menu:
         return
 
 
-#obj1 = Menu()
-#obj1.mainMenu()
+# obj1 = Menu()
+# print(obj1.fetchCredential())
+# obj1.mainMenu()

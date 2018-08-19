@@ -2,12 +2,14 @@ import imaplib
 
 import mailparser
 
+import first
+
 
 class Body:
 
     def fetchBody(self,id):
         mail = imaplib.IMAP4_SSL('imap.gmail.com')
-        mail.login('johnmcloy77@gmail.com', 'johnmcloy@123')
+        mail.login(obj11.fetchCredential()[0], obj11.fetchCredential()[1])
         mail.list()
         mail.select("inbox")
 
@@ -24,12 +26,8 @@ class Body:
         mail5 = mailparser.parse_from_bytes(raw_email)
 
         body = str(mail5.body.split("--- mail_boundary ---")[0])
-        print(body)
-        # for name in mail5.from_:
-        #     print("Name is ", name[0], " MailID is ", name[1], " SUbject is ")
-        # print(mail5.subject)
-
         return body
 
-obj10 = Body()
-obj10.fetchBody(-3)
+obj11 = first.Menu()
+# obj10 = Body()
+# obj10.fetchBody(-3)

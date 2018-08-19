@@ -1,5 +1,6 @@
 import speech_recognition as sr
 
+import FetchBody
 import contacts
 import first
 import inbox
@@ -76,6 +77,8 @@ class Listen:
 
         elif obj3.command in ["2","two", "to","list new messages","read new messages","list unread messages" ]:
             #obj5.fetch()
+
+            #obj3.textToSpeech(obj10.fetchBody(-1))
             pass
 
         elif obj3.command in ["3", "tree", "three", "check new mails", "new mails", "is there any new mail"]:
@@ -108,6 +111,7 @@ obj3 = first.Menu()
 obj4 = smtplib_send.Send()
 obj5 = contacts.Contact()
 obj6 = inbox.Inbox()
+obj10 = FetchBody.Body()
 #obj4.sendMail("kajaharish.4hud@gmail.com","hello","kya chlar ra")
 
 #obj3.mainMenu()

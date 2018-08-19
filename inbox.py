@@ -34,7 +34,7 @@ class Inbox:
 
                 # print(mail5.body)
                 for name in mail5.from_:
-                    self.audioString = str(str(i)+ ". Name is "+ name[0]+ ". Mail ID is"+ name[1]+ ", Subject, is, "+ mail5.subject)
+                    self.audioString = str(str(i)+ ". Name is "+ name[0]+ ". Mail ID is"+ name[1]+ ", Subject, is, "+ mail5.subject )
                     obj7.textToSpeech(self.audioString)
                     i += 1
 

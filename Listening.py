@@ -1,6 +1,7 @@
 import speech_recognition as sr
 
-import FetchBody
+import Sent
+# import FetchBody
 import contacts
 import first
 import inbox
@@ -66,7 +67,8 @@ class Listen:
             obj2.process()
 
         elif obj3.command in ["4","four","check sent mails","go to sentbox","go to sent box"]:
-            print("done4")
+            obj10.fetchSentBox()
+            obj2.process()
 
         elif obj3.command in ["5","five","add credentials","save credentials","","check sent mails","check sent box" ]:
             obj3.addCredential()
@@ -101,8 +103,8 @@ obj4 = smtplib_send.Send()
 obj5 = contacts.Contact()
 obj6 = inbox.Inbox()
 obj9 = unreadInbox.Unread()
-obj10 = FetchBody.Body()
-
+#obj10 = FetchBody.Body()
+obj10 = Sent.SentBox()
 
 #obj3.mainMenu()
 #obj3.textToSpeech("Issue a command")
